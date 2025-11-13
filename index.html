@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>YCDT – You Can Do This | S. Mato</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #111827;
+      --card: #1f2937;
+      --accent: #22c55e;
+      --accent-soft: #16a34a;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --danger: #f97373;
+      --border: #374151;
+      --shadow: 0 10px 25px rgba(0,0,0,0.45);
+      --radius-lg: 14px;
+      --radius-md: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 60%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(to right, rgba(15,23,42,0.9), rgba(15,23,42,0.6));
+      border-bottom: 1px solid rgba(148,163,184,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 30% 10%, #bbf7d0, #22c55e 40%, #064e3b 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      box-shadow: var(--shadow);
+    }
+
+    .brand-text h1 {
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-text span {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 1.5rem 1.5rem;
+    }
+
+    .sidebar {
+      width: 230px;
+      max-width: 40vw;
+      background: rgba(15,23,42,0.9);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      border: 1px solid rgba(148,163,184,0.4);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      height: fit-content;
+      position: sticky;
+      top: 72px;
+    }
+
+    .sidebar-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .nav-btn {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.6rem 0.75rem;
+      background: #020617;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s ease-out;
+    }
+
+    .nav-btn span {
+      font-size: 0.8rem;
+    }
+
+    .nav-btn.active {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      border-color: transparent;
+      box-shadow: 0 10px 25px rgba(34,197,94,0.35);
+      font-weight: 600;
+    }
+
+    .nav-btn:hover:not(.active) {
+      border-color: #4b5563;
+      background: #020617;
+      transform: translateY(-1px);
+    }
+
+    .content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .panel {
+      display: none;
+      background: rgba(15,23,42,0.95);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(148,163,184,0.4);
+      padding: 1.25rem 1.25rem 1.5rem;
+      box-shadow: var(--shadow);
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      margin-bottom: 0.35rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      margin: 0.75rem 0 0.35rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: #e5e7eb;
+      line-height: 1.5;
+      margin-bottom: 0.4rem;
+    }
+
+    .tagline {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .highlight {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 0.75rem 0.9rem;
+      margin-top: 0.4rem;
+    }
+
+    .card-header {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      color: var(--muted);
+      margin-right: 0.3rem;
+      margin-top: 0.2rem;
+    }
+
+    .pill-strong {
+      border-color: var(--accent);
+      color: #bbf7d0;
+    }
+
+    ul {
+      padding-left: 1.1rem;
+      margin-bottom: 0.35rem;
+    }
+
+    li {
+      font-size: 0.88rem;
+      color: #e5e7eb;
+      margin-bottom: 0.25rem;
+    }
+
+    .label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+    textarea, input[type="text"] {
+      width: 100%;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: #020617;
+      color: var(--text);
+      padding: 0.5rem 0.6rem;
+      font-size: 0.85rem;
+      resize: vertical;
+      min-height: 60px;
+      margin-top: 0.3rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      border: none;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-top: 0.4rem;
+      cursor: pointer;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      box-shadow: 0 6px 16px rgba(34,197,94,0.3);
+      transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(34,197,94,0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      border-color: #6b7280;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 0.7rem;
+      margin-top: 0.4rem;
+    }
+
+    .danger {
+      color: var(--danger);
+    }
+
+    .verse {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 0.4rem;
+    }
+
+    .verse-ref {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .quote-box {
+      border-left: 3px solid var(--accent);
+      padding-left: 0.7rem;
+      margin: 0.4rem 0 0.7rem;
+    }
+
+    .pill-alert {
+      border-color: var(--danger);
+      color: #fecaca;
+    }
+
+    .water-counter {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .water-glasses {
+      display: flex;
+      gap: 0.2rem;
+      flex-wrap: wrap;
+    }
+
+    .glass {
+      width: 20px;
+      height: 32px;
+      border-radius: 6px;
+      border: 1px solid #38bdf8;
+      background: rgba(15,23,42,0.7);
+    }
+
+    .glass.full {
+      background: linear-gradient(to top, #38bdf8, #e0f2fe);
+    }
+
+    footer {
+      padding: 0.7rem 1.5rem 1rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      border-top: 1px solid rgba(148,163,184,0.4);
+      background: rgba(15,23,42,0.95);
+    }
+
+    @media (max-width: 800px) {
+      main {
+        flex-direction: column;
+        padding: 0.75rem;
+      }
+      .sidebar {
+        position: static;
+        width: 100%;
+        max-width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      .sidebar-title {
+        flex-basis: 100%;
+      }
+      .nav-btn {
+        flex: 1 1 calc(50% - 0.4rem);
+      }
+      .panel {
+        padding: 0.9rem 0.8rem 1.2rem;
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-logo">YCDT</div>
+      <div class="brand-text">
+        <h1>You Can Do This</h1>
+        <span>Gentle discipline • Christ-centered health</span>
+      </div>
+    </div>
+    <div class="subtitle">
+      For: <span class="highlight">S. Mato</span> — 29 yrs • 107 kg • Gallstones • Office work
+    </div>
+  </header>
+
+  <main>
+    <aside class="sidebar">
+      <div class="sidebar-title">Plan Navigation</div>
+      <button class="nav-btn active" data-target="home">
+        Home & Overview <span>Start here</span>
+      </button>
+      <button class="nav-btn" data-target="goals">
+        Goals & Tracking <span>YCDT 💪</span>
+      </button>
+      <button class="nav-btn" data-target="exercise">
+        Exercise Plan <span>At home</span>
+      </button>
+      <button class="nav-btn" data-target="meals">
+        Meal Plan & Gallstones <span>Low fat</span>
+      </button>
+      <button class="nav-btn" data-target="sleep">
+        Sleep & Hydration <span>Recovery</span>
+      </button>
+      <button class="nav-btn" data-target="faith">
+        Motivation & Verses <span>In Christ</span>
+      </button>
+    </aside>
+
+    <section class="content">
+      <!-- Home -->
+      <section class="panel active" id="home">
+        <h2>Welcome, S. Mato 🫶</h2>
+        <p class="tagline">
+          This page is designed <span class="highlight">just for you</span>:
+          gentle but serious, Christ-centered, and realistic for your work
+          schedule, your weight goals, and your gallstones.
+        </p>
+
+        <div class="card">
+          <div class="card-header">Safety first – short medical notice</div>
+          <p>
+            This plan is <strong>general information</strong>, not a medical prescription.
+            Because you have <span class="highlight">gallstones</span>, always:
+          </p>
+          <ul>
+            <li>Check with your doctor before starting a new exercise program.</li>
+            <li>Stop immediately if you feel strong pain in the right upper belly,
+              dizziness, chest pain or shortness of breath.</li>
+            <li>Keep meals <strong>low in fat</strong> and avoid heavy, fried foods.</li>
+          </ul>
+          <p style="font-size:0.8rem;color:var(--muted);">
+            This page is here to support your journey – your doctor still has the final word. 🩺
+          </p>
+        </div>
+
+        <div class="grid" style="margin-top:0.8rem;">
+          <div class="card">
+            <div class="card-header">Main Focus (Next 8–12 Weeks)</div>
+            <ul>
+              <li>Slow, steady weight loss (no crash diets).</li>
+              <li>Protect your gallbladder with low-fat, simple meals.</li>
+              <li>Build daily movement habits you can keep for life.</li>
+              <li>Do everything with <span class="highlight">God in the center</span>, not vanity.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-header">Weekly Targets (Suggested)</div>
+            <ul>
+              <li>💪 <strong>3–4x</strong> home workouts (20–30 min).</li>
+              <li>🚶‍♀️ Daily steps: aim for <strong>6,000–8,000+</strong>.</li>
+              <li>💧 <strong>1.5–2 L</strong> water per day (if doctor allows).</li>
+              <li>😴 <strong>7–9 hours</strong> sleep per night.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Goals -->
+      <section class="panel" id="goals">
+        <h2>Your Goals – YCDT: You Can Do This</h2>
+        <p class="tagline">
+          Write it down. Pray over it. Walk it out. This part is between
+          <span class="highlight">you and God</span> – the website just helps you remember.
+        </p>
+
+        <label class="label" for="goal-main">1. Main health goal (next 3 months)</label>
+        <textarea id="goal-main" placeholder="Example: Lose 4–6 kg slowly, feel lighter in my body, have less gallbladder pain, and build a habit of moving my body with God in the center."></textarea>
+
+        <label class="label" for="goal-habits">2. Weekly habit goals</label>
+        <textarea id="goal-habits" placeholder="Example:
+• Walk at least 20–30 min on 5 days.
+• Do the home workout 3x per week.
+• Drink 2 L water on work days.
+• No fried food and no fast food."></textarea>
+
+        <label class="label" for="goal-faith">3. Spiritual focus for this journey</label>
+        <textarea id="goal-faith" placeholder="Example: To treat my body as the temple of God, not to impress people. To learn discipline as an act of worship and to remember that Jesus gives me strength, not my willpower."></textarea>
+
+        <button class="btn" id="save-goals">Save my goals on this device</button>
+        <button class="btn btn-secondary" id="clear-goals" style="margin-left:0.4rem;">Clear goals</button>
+        <p style="font-size:0.8rem;color:var(--muted);margin-top:0.35rem;">
+          Your goals are saved only in this browser (local storage). If you clear your browser data or use another device, you’ll need to re-enter them.
+        </p>
+      </section>
+
+      <!-- Exercise -->
+      <section class="panel" id="exercise">
+        <h2>Home Exercise Plan</h2>
+        <p class="tagline">
+          Low-impact, no equipment, gallstone-friendly. The key is
+          <span class="highlight">consistency</span>, not perfection.
+        </p>
+
+        <span class="pill pill-strong">Phase 1: Weeks 1–4</span>
+        <span class="pill">20–30 min per session</span>
+        <span class="pill">Warm up & cool down always</span>
+
+        <div class="card">
+          <div class="card-header">Weekly structure (suggested)</div>
+          <ul>
+            <li><strong>Mon – Strength (legs & core)</strong> – 20–25 min</li>
+            <li><strong>Tue – Gentle walk</strong> – 20–30 min</li>
+            <li><strong>Wed – Strength (upper body & posture)</strong> – 20–25 min</li>
+            <li><strong>Thu – Rest or light stretching</strong></li>
+            <li><strong>Fri – Mixed cardio (marching + steps)</strong> – 20–30 min</li>
+            <li><strong>Sat – Longer walk</strong> – 30–40 min at comfortable pace</li>
+            <li><strong>Sun – Rest + stretching + worship</strong></li>
+          </ul>
+          <p style="font-size:0.8rem;color:var(--muted);">
+            Always move at a pace where you can still talk. Stop if you feel sharp pain, dizziness, or chest tightness.
+          </p>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <div class="card-header">Sample Strength Day (at home)</div>
+            <p><strong>Warm up – 5 min</strong></p>
+            <ul>
+              <li>March in place – 1 min</li>
+              <li>Arm circles – 1 min</li>
+              <li>Shoulder rolls – 1 min</li>
+              <li>Gentle side bends – 2×30 sec each side</li>
+            </ul>
+            <p><strong>Main part – repeat 2–3 rounds</strong></p>
+            <ul>
+              <li>Chair squats – 10–12 reps</li>
+              <li>Wall push-ups – 8–10 reps</li>
+              <li>Standing knee raises – 10 per leg</li>
+              <li>Glute bridges (on mat/bed) – 10–12 reps</li>
+              <li>Standing calf raises (hold chair) – 12–15 reps</li>
+            </ul>
+            <p><strong>Cool down – 5 min</strong>: Stretch thighs, calves, lower back, shoulders.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Sample Cardio Day (low impact)</div>
+            <ul>
+              <li>5 min warm-up marching on the spot.</li>
+              <li>Then 15–20 min:
+                <ul>
+                  <li>1 min faster marching.</li>
+                  <li>1 min easy pace.</li>
+                </ul>
+              </li>
+              <li>Finish with 5 min gentle stretching + deep breathing.</li>
+            </ul>
+            <p>
+              Avoid jumping, running, or anything that causes strong jarring, especially if you feel discomfort in your upper right abdomen.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Desk & Office Movement</div>
+            <ul>
+              <li>Stand up at least every <strong>60 minutes</strong> for 2–3 min.</li>
+              <li>Walk to the bathroom / kitchen instead of using your phone.</li>
+              <li>Roll shoulders back 10x, neck gently side to side.</li>
+              <li>Mini walk at lunch: 5–10 min outside if possible.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Meals -->
+      <section class="panel" id="meals">
+        <h2>Meal Plan – Gallstone & Weight Friendly</h2>
+        <p class="tagline">
+          Simple, low-fat, home-friendly meals for your gallstones and weight goals.
+          The goal is to keep your gallbladder <span class="highlight">calm</span> and your energy stable.
+        </p>
+
+        <div class="grid">
+          <div class="card">
+            <div class="card-header">Suggested meal times</div>
+            <ul>
+              <li>🥣 <strong>Breakfast:</strong> 07:00–08:00</li>
+              <li>🍎 <strong>Small snack:</strong> 10:00–11:00</li>
+              <li>🥗 <strong>Lunch:</strong> 13:00–14:00</li>
+              <li>🥜 <strong>Small snack:</strong> 16:00–17:00</li>
+              <li>🍽️ <strong>Dinner (light):</strong> 19:00–20:00</li>
+            </ul>
+            <p style="font-size:0.8rem;color:var(--muted);">
+              Better to eat <strong>small portions more often</strong> than one huge, fatty meal (which can trigger gallstone attacks).
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Breakfast ideas (low-fat)</div>
+            <ul>
+              <li>Oatmeal cooked in water or low-fat milk + banana or berries.</li>
+              <li>2 slices whole-grain bread + thin layer avocado or hummus + tomato.</li>
+              <li>Low-fat yogurt (if you tolerate dairy) + fruit + 1 tbsp oats.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Lunch ideas</div>
+            <ul>
+              <li>Grilled or baked chicken breast (no skin) + brown rice + steamed vegetables.</li>
+              <li>Lentil or bean soup (no cream) + small piece of whole-grain bread.</li>
+              <li>Baked fish + boiled potatoes + carrots & broccoli.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Dinner ideas (keep it light)</div>
+            <ul>
+              <li>Vegetable soup (no cream) + 1 slice whole-grain bread.</li>
+              <li>Big salad with mixed greens, cucumber, tomato, carrots + small portion of chicken or beans.</li>
+              <li>Boiled sweet potato + steamed vegetables.</li>
+            </ul>
+            <p style="font-size:0.8rem;color:var(--muted);">
+              Try to avoid going to bed very full; leave 2–3 hours between dinner and sleep if you can.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header danger">Foods to avoid (especially with gallstones)</div>
+          <span class="pill pill-alert">No mercy section 😅</span>
+          <ul>
+            <li>❌ Fried foods (chips, fried chicken, schnitzel, etc.).</li>
+            <li>❌ Very fatty meats (bacon, sausage, salami, pork belly).</li>
+            <li>❌ Fast food (burgers, pizza, kebab with heavy sauce).</li>
+            <li>❌ Full-fat cheese, cream, and very oily sauces.</li>
+            <li>❌ Large amounts of chocolate, cakes, and pastries.</li>
+            <li>❌ Alcohol (can trigger gallbladder pain).</li>
+          </ul>
+          <p style="font-size:0.8rem;color:var(--muted);">
+            Some people also react to eggs – if you notice pain after eating eggs, limit or avoid them and talk to your doctor.
+          </p>
+        </div>
+      </section>
+
+      <!-- Sleep & Water -->
+      <section class="panel" id="sleep">
+        <h2>Sleep, Rest & Hydration</h2>
+        <p class="tagline">
+          Weight loss and gallbladder health are not just about food. Your
+          <span class="highlight">sleep and water</span> are part of the treatment.
+        </p>
+
+        <div class="grid">
+          <div class="card">
+            <div class="card-header">Sleep</div>
+            <ul>
+              <li>Aim for <strong>7–9 hours</strong> of sleep per night.</li>
+              <li>Try to keep a consistent schedule (e.g. 23:00–07:00).</li>
+              <li>Avoid heavy meals <strong>2–3 hours</strong> before bed.</li>
+              <li>Limit screens (phone, laptop) in the last 30–60 minutes.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Hydration</div>
+            <ul>
+              <li>Aim for around <strong>1.5–2 liters</strong> water per day (unless your doctor says otherwise).</li>
+              <li>Spread it through the day, not all at once.</li>
+              <li>Drink more on workout days and when it is hot.</li>
+              <li>Limit sugary drinks and sodas.</li>
+            </ul>
+
+            <div class="water-counter">
+              <div style="font-size:0.8rem;">Today’s water glasses (8×250 ml):</div>
+              <div class="water-glasses" id="water-glasses"></div>
+              <button class="btn btn-secondary" id="reset-water">Reset</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Faith & Motivation -->
+      <section class="panel" id="faith">
+        <h2>Christ-Centered Motivation</h2>
+        <p class="tagline">
+          Your body is not a project for the world to admire. It is a
+          <span class="highlight">temple of God</span> and an instrument for His Agape love.
+        </p>
+
+        <div class="card">
+          <div class="card-header">Identity reminder</div>
+          <div class="quote-box">
+            <p class="verse">
+              „Oder wisst ihr nicht, dass euer Leib ein Tempel des Heiligen Geistes ist, der in euch ist und den ihr von Gott habt, und dass ihr nicht euch selbst gehört?
+              Denn ihr seid teuer erkauft; darum verherrlicht Gott mit eurem Leib!“
+            </p>
+            <div class="verse-ref">1. Korinther 6,19–20</div>
+          </div>
+          <p>
+            The goal is <strong>not</strong> to decorate yourself for the world, but
+            to honour God with your body, your food choices, your movement and your
+            discipline, rooted in His <span class="highlight">Agape</span> love.
+          </p>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <div class="card-header">Whatever you do…</div>
+            <div class="quote-box">
+              <p class="verse">
+                „Alles, was ihr tut, das tut von Herzen als dem Herrn und nicht den Menschen.“
+              </p>
+              <div class="verse-ref">Kolosser 3,23</div>
+            </div>
+            <p>
+              Every walk, every glass of water, every night you choose sleep over scrolling –
+              do it <strong>for the Lord</strong>, not for Instagram, not for other people’s opinion.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">God guides the process</div>
+            <div class="quote-box">
+              <p class="verse">
+                „Ich will dich unterweisen und dir den Weg zeigen, den du gehen sollst;
+                ich will dich mit meinen Augen leiten.“
+              </p>
+              <div class="verse-ref">Psalm 32,8</div>
+            </div>
+            <p>
+              You are not walking this health journey alone. Ask Him for wisdom: when to push, when to rest, when to say “no” to food that harms you.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Strength for the hard days</div>
+            <div class="quote-box">
+              <p class="verse">
+                „Ich vermag alles durch den, der mich mächtig macht: Christus.“
+              </p>
+              <div class="verse-ref">Philipper 4,13</div>
+            </div>
+            <p>
+              On the days when you feel tired, tempted, or discouraged, remember:
+              it is not your willpower alone – it is Christ in you.
+            </p>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <div>© <span class="highlight">BIXNET</span> – YCDT • You Can Do This</div>
+    <div style="font-size:0.75rem;">
+      This page is informational and faith-based, not a substitute for professional medical advice.
+    </div>
+  </footer>
+
+  <script>
+    // Navigation
+    const navButtons = document.querySelectorAll('.nav-btn');
+    const panels = document.querySelectorAll('.panel');
+
+    navButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+
+        navButtons.forEach(b => b.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        document.getElementById(targetId).classList.add('active');
+      });
+    });
+
+    // Goals (localStorage)
+    const goalMain = document.getElementById('goal-main');
+    const goalHabits = document.getElementById('goal-habits');
+    const goalFaith = document.getElementById('goal-faith');
+    const saveGoalsBtn = document.getElementById('save-goals');
+    const clearGoalsBtn = document.getElementById('clear-goals');
+
+    const GOAL_KEYS = {
+      main: 'ycdt_goal_main',
+      habits: 'ycdt_goal_habits',
+      faith: 'ycdt_goal_faith'
+    };
+
+    function loadGoals() {
+      goalMain.value = localStorage.getItem(GOAL_KEYS.main) || '';
+      goalHabits.value = localStorage.getItem(GOAL_KEYS.habits) || '';
+      goalFaith.value = localStorage.getItem(GOAL_KEYS.faith) || '';
+    }
+
+    function saveGoals() {
+      localStorage.setItem(GOAL_KEYS.main, goalMain.value);
+      localStorage.setItem(GOAL_KEYS.habits, goalHabits.value);
+      localStorage.setItem(GOAL_KEYS.faith, goalFaith.value);
+      saveGoalsBtn.textContent = 'Saved ✅';
+      setTimeout(() => (saveGoalsBtn.textContent = 'Save my goals on this device'), 1500);
+    }
+
+    function clearGoals() {
+      if (!confirm('Clear all saved goals on this device?')) return;
+      Object.values(GOAL_KEYS).forEach(key => localStorage.removeItem(key));
+      goalMain.value = '';
+      goalHabits.value = '';
+      goalFaith.value = '';
+    }
+
+    if (saveGoalsBtn) saveGoalsBtn.addEventListener('click', saveGoals);
+    if (clearGoalsBtn) clearGoalsBtn.addEventListener('click', clearGoals);
+    loadGoals();
+
+    // Water counter (simple 8-glass tracker)
+    const waterGlassesContainer = document.getElementById('water-glasses');
+    const resetWaterBtn = document.getElementById('reset-water');
+    const WATER_KEY = 'ycdt_water_glasses';
+
+    function renderWaterGlasses() {
+      waterGlassesContainer.innerHTML = '';
+      const count = parseInt(localStorage.getItem(WATER_KEY) || '0', 10);
+      for (let i = 0; i < 8; i++) {
+        const div = document.createElement('div');
+        div.classList.add('glass');
+        if (i < count) div.classList.add('full');
+        div.addEventListener('click', () => toggleGlass(i, count));
+        waterGlassesContainer.appendChild(div);
+      }
+    }
+
+    function toggleGlass(index, current) {
+      // if clicking above current, fill up to that; if clicking last full, reduce
+      let newCount = current;
+      if (index + 1 === current) {
+        newCount = current - 1;
+      } else {
+        newCount = index + 1;
+      }
+      if (newCount < 0) newCount = 0;
+      if (newCount > 8) newCount = 8;
+      localStorage.setItem(WATER_KEY, String(newCount));
+      renderWaterGlasses();
+    }
+
+    if (resetWaterBtn) {
+      resetWaterBtn.addEventListener('click', () => {
+        localStorage.setItem(WATER_KEY, '0');
+        renderWaterGlasses();
+      });
+    }
+
+    renderWaterGlasses();
+  </script>
+</body>
+</html>
